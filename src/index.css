@@ -1,0 +1,149 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Proofline design system — warm ivory paper, ink text, a single violet accent.
+   All colors are HSL triplets consumed via hsl(var(--token)). */
+
+@layer base {
+  :root {
+    --font-display: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+    --font-body: 'Instrument Sans', 'Helvetica Neue', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --background: 40 45% 95.5%;
+    --foreground: 252 26% 14%;
+
+    --surface: 42 60% 98.6%;
+    --surface-sunken: 38 36% 92.5%;
+
+    --card: 42 60% 98.6%;
+    --card-foreground: 252 26% 14%;
+    --popover: 42 60% 98.6%;
+    --popover-foreground: 252 26% 14%;
+
+    --primary: 262 58% 49%;
+    --primary-foreground: 42 60% 98.6%;
+    --primary-soft: 262 70% 95%;
+
+    --secondary: 38 36% 92.5%;
+    --secondary-foreground: 252 26% 14%;
+
+    --muted: 38 30% 91%;
+    --muted-foreground: 252 9% 40%;
+
+    --accent: 262 70% 95%;
+    --accent-foreground: 262 58% 36%;
+
+    --highlight: 262 85% 88%;
+    --highlight-ring: 262 58% 49%;
+
+    --review: 34 72% 31%;
+    --review-surface: 40 85% 92%;
+    --review-border: 38 55% 78%;
+
+    --destructive: 4 62% 44%;
+    --destructive-foreground: 42 60% 98.6%;
+    --destructive-surface: 6 70% 95%;
+
+    --border: 36 22% 84%;
+    --input: 36 20% 80%;
+    --ring: 262 58% 49%;
+
+    --radius: 0.875rem;
+
+    --shadow-panel: 0 1px 0 hsl(36 30% 100% / 0.8) inset, 0 1px 2px hsl(30 30% 30% / 0.06), 0 8px 24px -12px hsl(30 35% 25% / 0.14);
+    --shadow-lift: 0 1px 2px hsl(30 30% 30% / 0.08), 0 14px 32px -16px hsl(262 40% 30% / 0.22);
+    --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --sidebar-background: 42 60% 98.6%;
+    --sidebar-foreground: 252 26% 14%;
+    --sidebar-primary: 262 58% 49%;
+    --sidebar-primary-foreground: 42 60% 98.6%;
+    --sidebar-accent: 262 70% 95%;
+    --sidebar-accent-foreground: 262 58% 36%;
+    --sidebar-border: 36 22% 84%;
+    --sidebar-ring: 262 58% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 15px;
+    line-height: 1.55;
+    background-image:
+      radial-gradient(1200px 500px at 85% -10%, hsl(var(--primary-soft) / 0.7), transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.18 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background: hsl(var(--highlight));
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .panel {
+    background-color: hsl(var(--surface));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .source-mark {
+    background-color: hsl(var(--highlight));
+    color: hsl(var(--foreground));
+    border-radius: 3px;
+    box-shadow: 0 0 0 2px hsl(var(--highlight)), 0 0 0 3px hsl(var(--highlight-ring) / 0.5);
+    animation: mark-in 420ms var(--ease-out);
+  }
+
+  @keyframes mark-in {
+    from { background-color: transparent; box-shadow: 0 0 0 0 transparent; }
+  }
+
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .rise-in {
+    animation: rise-in 360ms var(--ease-out) both;
+  }
+
+  @keyframes scan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+  }
+
+  .scan-bar {
+    animation: scan 1.4s var(--ease-out) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise-in, .source-mark, .scan-bar { animation: none; }
+  }
+}
+

@@ -1,0 +1,27 @@
+# Dependencies
+node_modules
+
+# Lockfiles
+bun.lock
+
+# Vite
+.vite
+
+# Build output
+dist
+
+# Netlify local state
+.netlify
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Cache
+cache
+coverage
+
+# OS files
+.DS_Store
+
