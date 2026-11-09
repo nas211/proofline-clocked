@@ -88,7 +88,17 @@ export function normalizeField(text: string, key: string, spec: FieldSpec, raw: 
         return { ...base, status: 'not_found', items: [], confidence: fieldConfidence, reviewSuggested: false };
     }
 
-    const rawItems: unknown[] = Array.isArray(value) ? value : [raw];
+    // Clocked lists keep selected strings in value and their source reads in
+    // items. Only attach evidence when it belongs to the same selected value.
+    const evidence = Array.isArray(raw.items) ? raw.items : [];
+    const rawItems: unknown[] = Array.isArray(value)
+        ? value.map((selected, index) => {
+            const item = evidence[index];
+            return typeof selected === 'string' && isRecord(item) && item.value === selected
+                ? item
+                : selected;
+        })
+        : [raw];
     const items: EvidenceItem[] = [];
     let malformed = false;
     for (const entry of rawItems) {

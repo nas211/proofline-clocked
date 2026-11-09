@@ -7,6 +7,32 @@ import { cpSpan } from './helpers';
 const TOTAL = SCHEMAS.invoice.total;
 const PARTIES = SCHEMAS.agreement.parties;
 
+describe('Clocked list value/items response contract', () => {
+    const source = '🧾 Alpha Studio and Beta Ltd';
+    const values = ['Alpha Studio', 'Beta Ltd'];
+    const evidence = values.map(value => ({ ...cpSpan(source, value), confidence: 0.9 }));
+
+    it('uses per-item evidence while preserving selected values and Unicode offsets', () => {
+        const result = normalizeField(source, 'parties', PARTIES, { value: values, items: evidence, confidence: 0.9 });
+        expect(result.items.map(item => item.value)).toEqual(values);
+        expect(result.items.every(item => item.located)).toBe(true);
+        expect(result.reviewSuggested).toBe(false);
+    });
+
+    it('never attaches evidence for a different or unselected value', () => {
+        const result = normalizeField(source, 'parties', PARTIES, { value: values, items: [...evidence].reverse() });
+        expect(result.items.map(item => item.value)).toEqual(values);
+        expect(result.items.every(item => !item.located)).toBe(true);
+    });
+
+    it('keeps selected values visible when optional evidence is absent', () => {
+        const result = normalizeField(source, 'parties', PARTIES, { value: values, confidence: 0.9 });
+        expect(result.items.map(item => item.value)).toEqual(values);
+        expect(result.items.every(item => item.start === null && !item.located)).toBe(true);
+        expect(result.reviewSuggested).toBe(true);
+    });
+});
+
 describe('Unicode code-point offsets', () => {
     const text = '💶 Total: €2,480.00\n📅 Due: 30 Nov';
 
